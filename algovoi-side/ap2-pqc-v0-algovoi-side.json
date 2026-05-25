@@ -1,0 +1,151 @@
+{
+  "schema_version": "1.0",
+  "artefact_id": "ap2-pqc-conformance-v0-algovoi-side",
+  "published_at": "2026-05-21T03:45:00Z",
+  "canonicalizer": "rfc8785@0.1.4",
+  "anchored_to": {
+    "thread": "https://github.com/google-agentic-commerce/AP2/issues/250",
+    "schema": "google-agentic-commerce/AP2 PaymentMandate v0.1",
+    "rfc": "RFC 8785 (JCS)"
+  },
+  "context": {
+    "purpose": "Joint conformance fixture for the AP2 PQC extension proposal (#250). AlgoVoi supplies canonical bytes + ECDSA (ES256) + Ed25519 + Falcon-1024 (FIPS 206) signatures over a single AP2 PaymentMandate canonical payload. @rayc0 supplies ML-DSA-65 (FIPS 204) over the IDENTICAL canonical byte sequence plus the 240-vector ML-DSA-65 test set.\n\nBy construction both fixture halves anchor to one canonical payload, so the JCS+SHA-256 substrate determinism is independent of the signature scheme â€” exactly the cross-implementor agreement @rayc0 and @chopmob-cloud locked in on #250 on 2026-05-16.",
+    "verification_recipe": [
+      "1. Compute JCS_bytes = rfc8785(mandate_body).",
+      "2. Confirm base64(JCS_bytes) == expected_jcs_bytes_b64.",
+      "3. Confirm sha256_hex(JCS_bytes) == expected_canonical_sha256.",
+      "4. For each signature, verify against the published public key over JCS_bytes."
+    ]
+  },
+  "mandate_body": {
+    "vct": "mandate.payment.1",
+    "version": "0.1",
+    "schema": "google-agentic-commerce/AP2 PaymentMandate",
+    "issued_at": "2026-05-21T00:00:00Z",
+    "issued_at_ms": 1779667200000,
+    "issuer": "did:web:wallet.example.org",
+    "subject": "did:web:agent.example.org#agent-7",
+    "merchant": "did:web:merchant.example.com",
+    "amount": {
+      "currency": "USD",
+      "minor_units": 4995
+    },
+    "constraints": [
+      {
+        "type": "merchant_id_allowlist",
+        "value": [
+          "did:web:merchant.example.com"
+        ]
+      },
+      {
+        "type": "expiry_unix_ms",
+        "value": 1782259200000
+      }
+    ],
+    "nonce": "0x7b5ce8a4f1b9a4d2"
+  },
+  "expected_jcs_bytes_b64": "eyJhbW91bnQiOnsiY3VycmVuY3kiOiJVU0QiLCJtaW5vcl91bml0cyI6NDk5NX0sImNvbnN0cmFpbnRzIjpbeyJ0eXBlIjoibWVyY2hhbnRfaWRfYWxsb3dsaXN0IiwidmFsdWUiOlsiZGlkOndlYjptZXJjaGFudC5leGFtcGxlLmNvbSJdfSx7InR5cGUiOiJleHBpcnlfdW5peF9tcyIsInZhbHVlIjoxNzgyMjU5MjAwMDAwfV0sImlzc3VlZF9hdCI6IjIwMjYtMDUtMjFUMDA6MDA6MDBaIiwiaXNzdWVkX2F0X21zIjoxNzc5NjY3MjAwMDAwLCJpc3N1ZXIiOiJkaWQ6d2ViOndhbGxldC5leGFtcGxlLm9yZyIsIm1lcmNoYW50IjoiZGlkOndlYjptZXJjaGFudC5leGFtcGxlLmNvbSIsIm5vbmNlIjoiMHg3YjVjZThhNGYxYjlhNGQyIiwic2NoZW1hIjoiZ29vZ2xlLWFnZW50aWMtY29tbWVyY2UvQVAyIFBheW1lbnRNYW5kYXRlIiwic3ViamVjdCI6ImRpZDp3ZWI6YWdlbnQuZXhhbXBsZS5vcmcjYWdlbnQtNyIsInZjdCI6Im1hbmRhdGUucGF5bWVudC4xIiwidmVyc2lvbiI6IjAuMSJ9",
+  "expected_jcs_bytes_hex": "7b22616d6f756e74223a7b2263757272656e6379223a22555344222c226d696e6f725f756e697473223a343939357d2c22636f6e73747261696e7473223a5b7b2274797065223a226d65726368616e745f69645f616c6c6f776c697374222c2276616c7565223a5b226469643a7765623a6d65726368616e742e6578616d706c652e636f6d225d7d2c7b2274797065223a226578706972795f756e69785f6d73222c2276616c7565223a313738323235393230303030307d5d2c226973737565645f6174223a22323032362d30352d32315430303a30303a30305a222c226973737565645f61745f6d73223a313737393636373230303030302c22697373756572223a226469643a7765623a77616c6c65742e6578616d706c652e6f7267222c226d65726368616e74223a226469643a7765623a6d65726368616e742e6578616d706c652e636f6d222c226e6f6e6365223a22307837623563653861346631623961346432222c22736368656d61223a22676f6f676c652d6167656e7469632d636f6d6d657263652f415032205061796d656e744d616e64617465222c227375626a656374223a226469643a7765623a6167656e742e6578616d706c652e6f7267236167656e742d37222c22766374223a226d616e646174652e7061796d656e742e31222c2276657273696f6e223a22302e31227d",
+  "expected_jcs_bytes_length": 501,
+  "expected_canonical_sha256": "sha256:cc8315f7696c65b2a07eb278de0e45c3149319526c8d443c7e38a17de04c28e0",
+  "signatures": {
+    "ES256": {
+      "algorithm": "ES256",
+      "curve": "P-256",
+      "hash": "SHA-256",
+      "publicKeyDer": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEbTLg9jAGG+xxyIDrAa3aRth+2ZEdL5ZNkpowu4hfPhpeLYjNxymp5XnE9DXrGaz6SBEE1cCYR/XRBf37JPOKaQ==",
+      "signature_der": "MEUCICj0qfFPlaioyWkLQtYiCaZtAYWNmhX1JcUcPmS1IeDQAiEApXQlnNdMH3Cq6mh0G1SbkmxUk9FJzFNaP5597Gq3O60=",
+      "signature_compact_b64": "KPSp8U+VqKjJaQtC1iIJpm0BhY2aFfUlxRw+ZLUh4NCldCWc10wfcKrqaHQbVJuSbFST0UnMU1o/nn3sarc7rQ=="
+    },
+    "Ed25519": {
+      "algorithm": "Ed25519",
+      "publicKey_b64": "KaGXztNJhscqbfNaVOeGZajY0bAzHHRPoDJa0P+qvyk=",
+      "signature_b64": "kRE/eh2AZuVp9jh7pqm29Gii5/rZI4ciU1FawGScuBTUjCsTXZv56D+Sxzw2CXfGtwJV+h7OgsH2SSQof4DrCA=="
+    },
+    "Falcon-1024": {
+      "algorithm": "Falcon-1024",
+      "fips": "FIPS 206 (FN-DSA)",
+      "nist_level": 5,
+      "publicKey_b64": "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",
+      "signature_b64": "OoTrGANnxT8f+6zxYSoViMqySg+uljRn3EpoJOASpkb8z7w/TqkmId5i5GOaOUN/t3w8a9xc1tEbaVOnxYVYFJS0ur8dPYOu73q6lqxs4rtm32SfmTb9vqs08iiKJorJf3tlnrEjVCRE0RULUov7jfKVMgGKf7GPdxjORY0nc2XYn8zW33oP5Ih4kktP46FcRboqrgkq7zUeXz6HgRBwYj9N8iWDtmKyIy0H61tle30zooFqulTGj8MlgJTIe78g5koIqyzSEjfuJHPIqxxv0TlK1bF45GUq3kZ0DlfxNebFiAwh4SLdWv1mGm9cEQahIHvS2pqQwmOePdaH8eBxOJNaaqO/Td0n3Xumw8h3uZ+oMQsPLZmhHQksdorkOpiXjIknXWMfOWr6RrUh7ltQhCCpx/XE+QWA69uzB38jnckq7kF28/Rznyx4tIPmiP2yTGMR4TBQIfLHTNwH6lhVUB5rikleiAyGmrLreCjJNqur2z3m6Q+ocskLQNdR36rNyJmyOCWRtdtWfXo5jGYpC611m4s2CMnx1CTyJ9qMTOMIY82gTaUIzK3+uegZfCBEppP4cwXR9UAcBEMhs2UInaFJVSnr9+Nih587dKoPgzSwIm00QTVoHAKh+U/4bAMLTEZSzizL881t8tn9Ofcni8QqDrspEgLNCjUYJT1jODMDUOWoZaVOjBiubXdFCkaDIoDkOkcBB/E1/Glud/uV2XPTeTNpudBVoTCoMsGq3Jhkq5UgVIt4iPNZfdpMl7+WOVPdBDZSo8EIrTZtyppaKBuHe06HIB5krMhPfdZSKLEiOvYymMntVMqOiVpOBizidryL7QIEx1Akz5uHqTCPs23YkicMTUULRZaWOcxAKnPGmhHK3zYJiXnCI23n72E6Rqiqpvf1wynHWnfqm6kG74xUmhq4egp1jmWoaJtNRNXWQMw99N5x/9rKrX9ZvUcEbWpduMgkwEzkkqlfSi9Txxe4+zkxnzHvVESzYyoS3+fqa8A4Bynx26CrXsIk6EimaH7yFKPp7yn2RcKV3pJdZA7etKzczxfiS+mfKSmDxRCaM9zP3EKVgDrarNpK9Tm4sdSBIIi+LJjrc1l73BZryUSqqIoIz5h0EY1dVjlcHkJomemnuwplNzwvFZb5rBnmL0GHNDIu9WI3Xon6EiawjDjpwURvY1sS6qW9CDOT6KnkjPshz/pRpGiJKV0itmZfCOivj6wZsKwtbGXR8s/Ya+yGX9SkIyg5YmLNRJ0czvGyejJ76quwj3OHBauaUg1LyC9EiTvgZUhT7+R/UmtRk0JU1lGdkhq5eSXoyzHn+sPK1fGxTnNbnO5vF6y++fVXsQ/iX9VpOWwe/vj5vGzyE3mJ/CbyDyby07FrV6rEsalAlAjtPtLKpdLib7BVYFbvHMH2k0mKAipvsIvuNiDfQTnRhudBmWRibY67Wdn1S5JWjKoZ2sczayuLMYcy+Tlc4FtXmi+Gk8bYKelmyBcdXS6PPFyc831/fh58kolwllDXpOD9Iz3MgvZernfUvxVOLtSH+5bGJn6jB0lILhui3R9QFDhBSjKY217xx3/vH/z7dSpBrNBinbRKm2r222JeZTzeEgMQR/mfNc8rGU71uC10anVvLbWlj0c0pKUP9+ca7ZZ+G0CPEe+zUyJujoGRaeeKqc1CZLHjI6z+Ta2PpzuMRSdIig==",
+      "signature_length_bytes": 1270,
+      "publicKey_length_bytes": 1793
+    }
+  },
+  "signature_algorithm_table": [
+    {
+      "identifier": "ECDSA",
+      "family": "Classical",
+      "source": "Generic ECDSA",
+      "notes": "Backward-compat alias for AP2 v0.1; new deployments SHOULD use ES256/ES256K/ES384/ES512."
+    },
+    {
+      "identifier": "ES256",
+      "family": "Classical",
+      "source": "RFC 7518 Â§3.4",
+      "notes": "ECDSA P-256 SHA-256"
+    },
+    {
+      "identifier": "ES256K",
+      "family": "Classical",
+      "source": "RFC 8812",
+      "notes": "ECDSA secp256k1 SHA-256"
+    },
+    {
+      "identifier": "Ed25519",
+      "family": "Classical",
+      "source": "RFC 8032 / RFC 8037",
+      "notes": "EdDSA Ed25519"
+    },
+    {
+      "identifier": "ML-DSA-44",
+      "family": "PQC",
+      "source": "FIPS 204 / draft-ietf-cose-dilithium",
+      "notes": "NIST Level 2"
+    },
+    {
+      "identifier": "ML-DSA-65",
+      "family": "PQC",
+      "source": "FIPS 204 / draft-ietf-cose-dilithium",
+      "notes": "NIST Level 3 (rayc0 default)"
+    },
+    {
+      "identifier": "ML-DSA-87",
+      "family": "PQC",
+      "source": "FIPS 204 / draft-ietf-cose-dilithium",
+      "notes": "NIST Level 5"
+    },
+    {
+      "identifier": "Falcon-512",
+      "family": "PQC",
+      "source": "FIPS 206 (FN-DSA)",
+      "notes": "NIST Level 1"
+    },
+    {
+      "identifier": "Falcon-1024",
+      "family": "PQC",
+      "source": "FIPS 206 (FN-DSA)",
+      "notes": "NIST Level 5 (AlgoVoi default)"
+    },
+    {
+      "identifier": "SLH-DSA-SHA2-128s",
+      "family": "PQC stateless-hash",
+      "source": "FIPS 205",
+      "notes": "SPHINCS+ small"
+    },
+    {
+      "identifier": "HMAC-SHA-256",
+      "family": "HMAC",
+      "source": "RFC 2104",
+      "notes": "Internal-channel only"
+    },
+    {
+      "identifier": "HMAC-SHA-384",
+      "family": "HMAC",
+      "source": "RFC 2104 / FIPS 198-1",
+      "notes": "PQC-conservative HMAC"
+    }
+  ],
+  "rayc0_ml_dsa_pending": true,
+  "rayc0_pending_url": "https://github.com/google-agentic-commerce/AP2/issues/250"
+}
