@@ -78,7 +78,13 @@ def main() -> int:
         "canonicalizer": "rfc8785@0.1.4",
         "anchored_to": {
             "thread": "https://github.com/google-agentic-commerce/AP2/issues/250",
-            "report": "AP2 #250 comment 2026-11-24 (hybrid separation / stripping)",
+            "report": "AP2 #250 comment 7127315451 (2026-11-24, @eltociear) on hybrid separation / stripping",
+            "reporter": {
+                "name": "Ikko Eltociear Ashimine",
+                "login": "eltociear",
+                "comment": "https://github.com/google-agentic-commerce/AP2/issues/250#issuecomment-7127315451",
+                "profile": "https://github.com/eltociear/pqam",
+            },
             "schema": "google-agentic-commerce/AP2 PaymentMandate v0.1",
             "rfc": "RFC 8785 (JCS)",
         },

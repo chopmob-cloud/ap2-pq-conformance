@@ -27,8 +27,10 @@ In the v0 fixtures every scheme signs that identical canonical byte sequence wit
 nothing binding the halves together. A verifier handed only one half accepts it, so a
 hybrid can be separated: after Q-Day an attacker drops the post-quantum signature and
 presents a forged classical one to any verifier whose policy does not yet require PQ.
-This was reported on [AP2 #250](https://github.com/google-agentic-commerce/AP2/issues/250)
+This was reported by **Ikko Eltociear Ashimine** ([@eltociear](https://github.com/eltociear)) on
+[AP2 #250](https://github.com/google-agentic-commerce/AP2/issues/250#issuecomment-7127315451)
 on 2026-11-24 and is reproducible here by `algovoi-side/test_strip_resistance.py::test_v0_is_separable`.
+See [CREDITS.md](CREDITS.md).
 
 The v0 fixtures stay in place unchanged as history. The **v1** fixture on the AlgoVoi
 side binds the object type and the required signer set into the signed input and fails
