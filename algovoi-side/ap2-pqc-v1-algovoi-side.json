@@ -7,9 +7,15 @@
   "canonicalizer": "rfc8785@0.1.4",
   "anchored_to": {
     "thread": "https://github.com/google-agentic-commerce/AP2/issues/250",
-    "report": "AP2 #250 comment 2026-11-24 (hybrid separation / stripping)",
+    "report": "AP2 #250 comment 7127315451 (2026-11-24, @eltociear) on hybrid separation / stripping",
     "schema": "google-agentic-commerce/AP2 PaymentMandate v0.1",
-    "rfc": "RFC 8785 (JCS)"
+    "rfc": "RFC 8785 (JCS)",
+    "reporter": {
+      "name": "Ikko Eltociear Ashimine",
+      "login": "eltociear",
+      "comment": "https://github.com/google-agentic-commerce/AP2/issues/250#issuecomment-7127315451",
+      "profile": "https://github.com/eltociear/pqam"
+    }
   },
   "signing_construction": "signed_input = 'AP2PQC/1.0/' + object_type + 0x00 + jcs(mandate_body) + 0x00 + jcs(signer_set)",
   "mandate_body": {
