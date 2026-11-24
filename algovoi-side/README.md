@@ -50,11 +50,46 @@ The convention agreed with @rayc0 on AP2 #250 on 2026-05-16. Open-enum on `signa
 | `HMAC-SHA-256` | HMAC | RFC 2104 | Internal-channel only |
 | `HMAC-SHA-384` | HMAC | RFC 2104 / FIPS 198-1 | PQC-conservative HMAC |
 
+## v1 signed input
+
+`ap2-pqc-v1-algovoi-side.json` supersedes the v0 artefact for the hybrid-separation
+weakness reported on [AP2 #250](https://github.com/google-agentic-commerce/AP2/issues/250)
+on 2026-11-24. The canonical substrate is unchanged: the same 501-byte JCS
+`PaymentMandate`. What changes is the bytes the signatures cover.
+
+```
+signed_input = "AP2PQC/1.0/" + object_type + 0x00 + JCS(mandate_body) + 0x00 + JCS(signer_set)
+```
+
+| Element | Why it is there |
+|---|---|
+| `"AP2PQC/1.0/"` | domain tag, so the preimage cannot collide with another protocol using the same base |
+| `object_type` | a `PaymentMandate` signature no longer verifies once the artefact is relabelled `Approval` or `Receipt` |
+| `JCS(signer_set)` | the required signer set is inside the signed bytes, so it cannot be downgraded without invalidating every signature |
+
+Verification fails closed: every signer listed in `signer_set` must be present with a
+matching `key_id`, a signature for a signer the descriptor does not list is an error,
+and an unknown algorithm is a failure rather than a skip.
+
+| File | Purpose |
+|---|---|
+| `ap2-pqc-v1-algovoi-side.json` | v1 artefact: 501-byte mandate body, 843-byte signed input, three signatures over it |
+| `verify_v1.py` | v1 verifier implementing the fail-closed signer set |
+| `build_v1_fixture.py` | regenerates the v1 artefact |
+| `test_strip_resistance.py` | 10 tests: the v0 separability characterisation plus both stripping directions, descriptor substitution, key_id mismatch and fail-closed unknown algorithm |
+
+```bash
+pip install rfc8785==0.1.4 cryptography pqcrypto
+python verify_v1.py ap2-pqc-v1-algovoi-side.json    # exit 0, all checks pass
+python verify_v1.py ap2-pqc-v0-algovoi-side.json    # exit 1, v0 carries no signed descriptor
+python -m unittest -v test_strip_resistance         # 10 tests OK
+```
+
 ## What this fixture is NOT
 
 - Not a normative AP2 spec contribution by itself; the spec text lives in [#250](https://github.com/google-agentic-commerce/AP2/issues/250) and any follow-up PR.
 - Not a complete PQC conformance set on its own. @rayc0's ML-DSA-65 fixture is the second half; merge both and you have the three-signature-scheme cross-implementor convergence the issue thread converged on.
-- Keys here are deterministic-from-seed (ES256, Ed25519) or freshly generated (Falcon-1024); private keys are emitted alongside the public material so any reader can re-sign the same canonical bytes and confirm verification. This is a **public reference fixture**, not a production keypair.
+- Keys here are test material only. v1 publishes its seed strings (ES256, Ed25519) and the Falcon-1024 secret under `test_key_material` so the fixture can be re-signed by anyone; v0 publishes public keys only and cannot be re-signed. This is a **public reference fixture**, not a production keypair.
 
 ## Cross-references
 
