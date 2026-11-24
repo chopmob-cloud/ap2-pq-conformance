@@ -21,6 +21,20 @@ canonical of one AP2 `PaymentMandate`. Each side ships its fixture JSON plus a
 single-file standalone `verify.py` that recomputes the JCS canonical bytes, recomputes
 SHA-256, and verifies each signature against the published public key.
 
+## v0 construction and the separation weakness
+
+In the v0 fixtures every scheme signs that identical canonical byte sequence with
+nothing binding the halves together. A verifier handed only one half accepts it, so a
+hybrid can be separated: after Q-Day an attacker drops the post-quantum signature and
+presents a forged classical one to any verifier whose policy does not yet require PQ.
+This was reported on [AP2 #250](https://github.com/google-agentic-commerce/AP2/issues/250)
+on 2026-11-24 and is reproducible here by `algovoi-side/test_strip_resistance.py::test_v0_is_separable`.
+
+The v0 fixtures stay in place unchanged as history. The **v1** fixture on the AlgoVoi
+side binds the object type and the required signer set into the signed input and fails
+closed when a listed signer is absent or unverifiable. See
+[`algovoi-side/README.md`](algovoi-side/README.md#v1-signed-input).
+
 ## Reproduce
 
 See each side's README for its exact dependencies and command:
